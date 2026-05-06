@@ -25,7 +25,7 @@ namespace candle {
     //% block="set up candle on pin %pin with %numLeds LEDs at brightness %brightness"
     //% numLeds.shadow="range" numLeds.min=1 numLeds.max=30 numLeds.defl=4
     //% brightness.shadow="range" brightness.min=0 brightness.max=255 brightness.defl=255
-    export function setup(pin: DigitalPin, numLeds: number, brightness: number): void {
+    export function setup(pin: DigitalPin, numLeds: number = 4, brightness: number = 255): void {
         _strip = neopixel.create(pin, numLeds, NeoPixelMode.RGB)
         _strip.clear()
         _strip.show()
@@ -39,7 +39,7 @@ namespace candle {
     //% r.shadow="range" r.min=0 r.max=255 r.defl=100
     //% g.shadow="range" g.min=0 g.max=255 g.defl=40
     //% b.shadow="range" b.min=0 b.max=255 b.defl=5
-    export function setDimColour(r: number, g: number, b: number): void {
+    export function setDimColour(r: number = 100, g: number = 40, b: number = 5): void {
         _rDim = r
         _gDim = g
         _bDim = b
@@ -52,7 +52,7 @@ namespace candle {
     //% r.shadow="range" r.min=0 r.max=255 r.defl=226
     //% g.shadow="range" g.min=0 g.max=255 g.defl=100
     //% b.shadow="range" b.min=0 b.max=255 b.defl=10
-    export function setBrightColour(r: number, g: number, b: number): void {
+    export function setBrightColour(r: number = 226, g: number = 100, b: number = 10): void {
         _rBright = r
         _gBright = g
         _bBright = b
@@ -68,11 +68,11 @@ namespace candle {
     //% smoothDown.shadow="range" smoothDown.min=2 smoothDown.max=10 smoothDown.defl=2
     //% smoothUp.shadow="range" smoothUp.min=2 smoothUp.max=15 smoothUp.defl=5
     export function setFlickerBehaviour(
-        flickerAmount: number,
-        gustChance: number,
-        gustStrength: number,
-        smoothDown: number,
-        smoothUp: number
+        flickerAmount: number = 70,
+        gustChance: number = 10,
+        gustStrength: number = 80,
+        smoothDown: number = 2,
+        smoothUp: number = 5
     ): void {
         _flickerAmount = flickerAmount
         _gustChance = gustChance
