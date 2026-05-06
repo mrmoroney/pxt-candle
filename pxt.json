@@ -1,13 +1,13 @@
 {
     "name": "Candle Effect",
     "description": "Realistic candle flicker effect for NeoPixel strips",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "license": "MIT",
     "dependencies": {
         "neopixel": "github:microsoft/pxt-neopixel#v0.7.3"
     },
     "files": [
-        "candle.ts",
-        "test.ts"
+        "test.ts",
+        "candle.ts"
     ]
 }
