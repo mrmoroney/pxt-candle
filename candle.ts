@@ -37,12 +37,23 @@ namespace candle {
      * @param gustChance chance of a gust per frame 0-100, eg: 10
      * @param gustStrength strength of gusts 0-100, eg: 80
      */
-    //% block="flicker candle || dim colour R%rDim G%gDim B%bDim bright colour R%rBright G%gBright B%bBright flicker %flickerAmount smooth down %smoothDown smooth up %smoothUp gust chance %gustChance gust strength %gustStrength"
+    //% block="flicker candle || === Colours === dim R%rDim G%gDim B%bDim bright R%rBright G%gBright B%bBright === Behaviour === flicker %flickerAmount smooth down %smoothDown smooth up %smoothUp gust chance %gustChance gust strength %gustStrength"
     //% flickerAmount.min=0 flickerAmount.max=100
+    //% flickerAmount.fieldEditor="slider"
     //% gustChance.min=0 gustChance.max=100
+    //% gustChance.fieldEditor="slider"
     //% gustStrength.min=0 gustStrength.max=100
+    //% gustStrength.fieldEditor="slider"
     //% smoothDown.min=2 smoothDown.max=10
+    //% smoothDown.fieldEditor="slider"
     //% smoothUp.min=2 smoothUp.max=15
+    //% smoothUp.fieldEditor="slider"
+    //% rDim.min=0 rDim.max=255 rDim.fieldEditor="slider"
+    //% gDim.min=0 gDim.max=255 gDim.fieldEditor="slider"
+    //% bDim.min=0 bDim.max=255 bDim.fieldEditor="slider"
+    //% rBright.min=0 rBright.max=255 rBright.fieldEditor="slider"
+    //% gBright.min=0 gBright.max=255 gBright.fieldEditor="slider"
+    //% bBright.min=0 bBright.max=255 bBright.fieldEditor="slider"
     //% expandableArgumentMode="toggle"
     export function flicker(
         rDim = 100, gDim = 40, bDim = 5,
