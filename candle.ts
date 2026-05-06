@@ -23,8 +23,8 @@ namespace candle {
      * Set up the candle on a NeoPixel strip
      */
     //% block="set up candle on pin %pin with %numLeds LEDs at brightness %brightness"
-    //% brightness.min=0 brightness.max=255 brightness.fieldEditor="slider"
-    //% numLeds.min=1 numLeds.max=30
+    //% numLeds.shadow="range" numLeds.min=1 numLeds.max=30 numLeds.defl=4
+    //% brightness.shadow="range" brightness.min=0 brightness.max=255 brightness.defl=255
     export function setup(pin: DigitalPin, numLeds: number, brightness: number): void {
         _strip = neopixel.create(pin, numLeds, NeoPixelMode.RGB)
         _strip.clear()
@@ -36,10 +36,10 @@ namespace candle {
      * Set the dim colour (gust end)
      */
     //% block="set dim colour R%r G%g B%b"
-    //% r.min=0 r.max=255 r.fieldEditor="slider"
-    //% g.min=0 g.max=255 g.fieldEditor="slider"
-    //% b.min=0 b.max=255 b.fieldEditor="slider"
-    export function setDimColour(r: number = 100, g: number = 40, b: number = 5): void {
+    //% r.shadow="range" r.min=0 r.max=255 r.defl=100
+    //% g.shadow="range" g.min=0 g.max=255 g.defl=40
+    //% b.shadow="range" b.min=0 b.max=255 b.defl=5
+    export function setDimColour(r: number, g: number, b: number): void {
         _rDim = r
         _gDim = g
         _bDim = b
@@ -49,10 +49,10 @@ namespace candle {
      * Set the bright colour (steady end)
      */
     //% block="set bright colour R%r G%g B%b"
-    //% r.min=0 r.max=255 r.fieldEditor="slider"
-    //% g.min=0 g.max=255 g.fieldEditor="slider"
-    //% b.min=0 b.max=255 b.fieldEditor="slider"
-    export function setBrightColour(r: number = 226, g: number = 100, b: number = 10): void {
+    //% r.shadow="range" r.min=0 r.max=255 r.defl=226
+    //% g.shadow="range" g.min=0 g.max=255 g.defl=100
+    //% b.shadow="range" b.min=0 b.max=255 b.defl=10
+    export function setBrightColour(r: number, g: number, b: number): void {
         _rBright = r
         _gBright = g
         _bBright = b
@@ -61,18 +61,18 @@ namespace candle {
     /**
      * Set the flicker behaviour
      */
-    //% block="set flicker amount%flickerAmount gust chance%gustChance gust strength%gustStrength smooth down%smoothDown smooth up%smoothUp"
-    //% flickerAmount.min=0 flickerAmount.max=100 flickerAmount.fieldEditor="slider"
-    //% gustChance.min=0 gustChance.max=100 gustChance.fieldEditor="slider"
-    //% gustStrength.min=0 gustStrength.max=100 gustStrength.fieldEditor="slider"
-    //% smoothDown.min=2 smoothDown.max=10 smoothDown.fieldEditor="slider"
-    //% smoothUp.min=2 smoothUp.max=15 smoothUp.fieldEditor="slider"
+    //% block="set flicker amount %flickerAmount gust chance %gustChance gust strength %gustStrength smooth down %smoothDown smooth up %smoothUp"
+    //% flickerAmount.shadow="range" flickerAmount.min=0 flickerAmount.max=100 flickerAmount.defl=70
+    //% gustChance.shadow="range" gustChance.min=0 gustChance.max=100 gustChance.defl=10
+    //% gustStrength.shadow="range" gustStrength.min=0 gustStrength.max=100 gustStrength.defl=80
+    //% smoothDown.shadow="range" smoothDown.min=2 smoothDown.max=10 smoothDown.defl=2
+    //% smoothUp.shadow="range" smoothUp.min=2 smoothUp.max=15 smoothUp.defl=5
     export function setFlickerBehaviour(
-        flickerAmount: number = 70,
-        gustChance: number = 10,
-        gustStrength: number = 80,
-        smoothDown: number = 2,
-        smoothUp: number = 5
+        flickerAmount: number,
+        gustChance: number,
+        gustStrength: number,
+        smoothDown: number,
+        smoothUp: number
     ): void {
         _flickerAmount = flickerAmount
         _gustChance = gustChance
