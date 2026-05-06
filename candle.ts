@@ -1,4 +1,13 @@
-let _rDim = 100
+//% color="#ff6600" icon="\uf06d" block="Candle"
+namespace candle {
+
+    let _strip: neopixel.Strip = null
+    let currentR = 0
+    let currentG = 0
+    let currentB = 0
+    let gustTimer = 0
+
+    let _rDim = 100
     let _gDim = 40
     let _bDim = 5
     let _rBright = 226
@@ -9,6 +18,19 @@ let _rDim = 100
     let _smoothUp = 5
     let _gustChance = 10
     let _gustStrength = 80
+
+    /**
+     * Set up the candle on a NeoPixel strip
+     */
+    //% block="set up candle on pin %pin with %numLeds LEDs at brightness %brightness"
+    //% brightness.min=0 brightness.max=255 brightness.fieldEditor="slider"
+    //% numLeds.min=1 numLeds.max=30
+    export function setup(pin: DigitalPin, numLeds: number, brightness: number): void {
+        _strip = neopixel.create(pin, numLeds, NeoPixelMode.RGB)
+        _strip.clear()
+        _strip.show()
+        _strip.setBrightness(brightness)
+    }
 
     /**
      * Set the dim colour (gust end)
@@ -100,3 +122,4 @@ let _rDim = 100
         _strip.setPixelColor(0, neopixel.rgb(currentR, currentG, currentB))
         _strip.show()
     }
+}
