@@ -7,25 +7,16 @@ namespace candle {
     let currentB = 0
     let gustTimer = 0
 
-    let _rDim = 100
-    let _gDim = 40
-    let _bDim = 5
-    let _rBright = 226
-    let _gBright = 100
-    let _bBright = 10
-    let _flickerAmount = 70
-    let _smoothDown = 2
-    let _smoothUp = 5
-    let _gustChance = 10
-    let _gustStrength = 80
-
     /**
      * Set up the candle on a NeoPixel strip
+     * @param pin the pin the strip is connected to
+     * @param numLeds number of LEDs on the strip
+     * @param brightness brightness 0-255, eg: 255
      */
     //% block="set up candle on pin %pin with %numLeds LEDs at brightness %brightness"
-    //% numLeds.shadow="range" numLeds.min=1 numLeds.max=30 numLeds.defl=4
-    //% brightness.shadow="range" brightness.min=0 brightness.max=255 brightness.defl=255
-    export function setup(pin: DigitalPin, numLeds: number = 4, brightness: number = 255): void {
+    //% brightness.min=0 brightness.max=255
+    //% numLeds.min=1 numLeds.max=30
+    export function setup(pin: DigitalPin, numLeds: number, brightness: number): void {
         _strip = neopixel.create(pin, numLeds, NeoPixelMode.RGB)
         _strip.clear()
         _strip.show()
@@ -33,79 +24,52 @@ namespace candle {
     }
 
     /**
-     * Set the dim colour (gust end)
-     */
-    //% block="set dim colour R%r G%g B%b"
-    //% r.shadow="range" r.min=0 r.max=255 r.defl=100
-    //% g.shadow="range" g.min=0 g.max=255 g.defl=40
-    //% b.shadow="range" b.min=0 b.max=255 b.defl=5
-    export function setDimColour(r: number = 100, g: number = 40, b: number = 5): void {
-        _rDim = r
-        _gDim = g
-        _bDim = b
-    }
-
-    /**
-     * Set the bright colour (steady end)
-     */
-    //% block="set bright colour R%r G%g B%b"
-    //% r.shadow="range" r.min=0 r.max=255 r.defl=226
-    //% g.shadow="range" g.min=0 g.max=255 g.defl=100
-    //% b.shadow="range" b.min=0 b.max=255 b.defl=10
-    export function setBrightColour(r: number = 226, g: number = 100, b: number = 10): void {
-        _rBright = r
-        _gBright = g
-        _bBright = b
-    }
-
-    /**
-     * Set the flicker behaviour
-     */
-    //% block="set flicker amount %flickerAmount gust chance %gustChance gust strength %gustStrength smooth down %smoothDown smooth up %smoothUp"
-    //% flickerAmount.shadow="range" flickerAmount.min=0 flickerAmount.max=100 flickerAmount.defl=70
-    //% gustChance.shadow="range" gustChance.min=0 gustChance.max=100 gustChance.defl=10
-    //% gustStrength.shadow="range" gustStrength.min=0 gustStrength.max=100 gustStrength.defl=80
-    //% smoothDown.shadow="range" smoothDown.min=2 smoothDown.max=10 smoothDown.defl=2
-    //% smoothUp.shadow="range" smoothUp.min=2 smoothUp.max=15 smoothUp.defl=5
-    export function setFlickerBehaviour(
-        flickerAmount: number = 70,
-        gustChance: number = 10,
-        gustStrength: number = 80,
-        smoothDown: number = 2,
-        smoothUp: number = 5
-    ): void {
-        _flickerAmount = flickerAmount
-        _gustChance = gustChance
-        _gustStrength = gustStrength
-        _smoothDown = smoothDown
-        _smoothUp = smoothUp
-    }
-
-    /**
      * Run one frame of the candle flicker effect
+     * @param rDim red value of dim colour, eg: 100
+     * @param gDim green value of dim colour, eg: 40
+     * @param bDim blue value of dim colour, eg: 5
+     * @param rBright red value of bright colour, eg: 226
+     * @param gBright green value of bright colour, eg: 100
+     * @param bBright blue value of bright colour, eg: 10
+     * @param flickerAmount how much the flame flickers 0-100, eg: 70
+     * @param smoothDown dip speed, eg: 2
+     * @param smoothUp recovery speed, eg: 5
+     * @param gustChance chance of a gust per frame 0-100, eg: 10
+     * @param gustStrength strength of gusts 0-100, eg: 80
      */
-    //% block="flicker candle"
-    export function flicker(): void {
+    //% block="flicker candle || R (Dim) %rDim G (Dim) %gDim B (Dim) %bDim R (Bright) %rBright G (Bright) %gBright B (Bright) %bBright flicker %flickerAmount smooth down %smoothDown smooth up %smoothUp gust chance %gustChance gust strength %gustStrength"
+    //% flickerAmount.min=0 flickerAmount.max=100
+    //% gustChance.min=0 gustChance.max=100
+    //% gustStrength.min=0 gustStrength.max=100
+    //% smoothDown.min=2 smoothDown.max=10
+    //% smoothUp.min=2 smoothUp.max=15
+    //% expandableArgumentMode="toggle"
+    export function flicker(
+        rDim = 100, gDim = 40, bDim = 5,
+        rBright = 226, gBright = 100, bBright = 10,
+        flickerAmount = 70, smoothDown = 2, smoothUp = 5,
+        gustChance = 10, gustStrength = 80
+    ): void {
         if (_strip == null) return
 
         if (gustTimer > 0) {
             gustTimer = gustTimer - 1
-        } else if (Math.randomRange(0, 100) < _gustChance) {
+        } else if (Math.randomRange(0, 100) < gustChance) {
             gustTimer = Math.randomRange(3, 8)
         }
 
-        let flickerVal = Math.randomRange(0, _flickerAmount)
+        let flicker = Math.randomRange(0, flickerAmount)
         if (gustTimer > 0) {
-            flickerVal = Math.min(100, flickerVal + _gustStrength)
+            flicker = Math.min(100, flicker + gustStrength)
         }
 
-        let targetR = _rBright + Math.idiv((_rDim - _rBright) * flickerVal, 100)
-        let targetG = _gBright + Math.idiv((_gDim - _gBright) * flickerVal, 100)
-        let targetB = _bBright + Math.idiv((_bDim - _bBright) * flickerVal, 100)
+        let targetR = rBright + Math.idiv((rDim - rBright) * flicker, 100)
+        let targetG = gBright + Math.idiv((gDim - gBright) * flicker, 100)
+        let targetB = bBright + Math.idiv((bDim - bBright) * flicker, 100)
 
-        let smoothR = targetR < currentR ? _smoothDown : _smoothUp
-        let smoothG = targetG < currentG ? _smoothDown : _smoothUp
-        let smoothB = targetB < currentB ? _smoothDown : _smoothUp
+        let smoothR = targetR < currentR ? smoothDown : smoothUp
+        let smoothG = targetG < currentG ? smoothDown : smoothUp
+        let smoothB = targetB < currentB ? smoothDown : smoothUp
 
         let stepR = Math.idiv(targetR - currentR, smoothR)
         if (targetR != currentR && stepR == 0) { stepR = targetR > currentR ? 1 : -1 }
